@@ -28,6 +28,10 @@ if (command === "concert-this") {
             console.log('error:', error); // Print the error if one occurred
 
         } else if (response.statusCode === 200) {
+            var concertDate = JSON.parse(body)[0].datetime; //Date of the concert
+            var dateFormat = "YYYY-DD-MMThh:mm:ss"; //Original date format
+            var convertedDate = moment(concertDate, dateFormat); //converted dat format using moment
+
             console.log("----------------"); // Print break.
             console.log('Artist:', JSON.parse(body)[0].lineup[0]); // Print the Venue.
             console.log(""); // Print space.
@@ -35,7 +39,7 @@ if (command === "concert-this") {
             console.log(""); // Print space.
             console.log('Venue Location:', JSON.parse(body)[0].venue.city + ", " + JSON.parse(body)[0].venue.region); // Print the location.
             console.log(""); // Print space.
-            console.log('Venue Date:', JSON.parse(body)[0].datetime); // Print the Date.
+            console.log('Venue Date:', moment(convertedDate).format("MM/DD/YY")); // Print the Date.
             console.log("----------------"); // Print break.
 
         }
