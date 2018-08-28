@@ -10,15 +10,16 @@ var moment = require("moment")
 var dotenv = require("dotenv");
 var fs = require("fs");
 
+//LIRI command grabbed from the command line
 var command = process.argv[2];
-//console.log(command);
+//User input grabbed from the command line concatenated with a '+' sign
 var queryName = process.argv.slice(3).join("+");
 
 
-//concert-this
+//concert-this queryURL global
 var concertURL = "https://rest.bandsintown.com/artists/" + queryName + "/events?app_id=codingbootcamp";
 
-//movie-this
+//movie-this queryURL global
 var queryUrl = 'http://www.omdbapi.com/?t=' + queryName + '&y=&plot=short&apikey=trilogy'
 
 
@@ -43,9 +44,9 @@ if (command === "concert-this") {
             console.log("----------------"); // Print break.
 
         }
-
     });
 }
+
 else if (command === "movie-this") {
 
     if (!queryName) {
@@ -72,7 +73,6 @@ else if (command === "movie-this") {
                 console.log("----------------"); // Print break.
 
             }
-
         });
     }
 
@@ -101,8 +101,8 @@ else if (command === "movie-this") {
             }
         });
     }
-
 }
+
 else if (command === "spotify-this-song") {
 
     var spotify = new Spotify({
@@ -129,6 +129,7 @@ else if (command === "spotify-this-song") {
 
         });
     }
+
     else {
         spotify.search({ type: 'track', query: queryName }, function (err, data) {
             if (err) {
@@ -148,4 +149,43 @@ else if (command === "spotify-this-song") {
 
         });
     }
+}
+
+else if (command === "do-what-it-says") {
+    fs.readFile("random.txt", "utf8", function (error, data) {
+
+        // If the code experiences any errors it will log the error to the console.
+        if (error) {
+            return console.log(error);
+        }
+
+        // Then split it by commas (to make it more readable)
+        var dataArr = data.split(",");
+        var doThisCommand = dataArr[0];
+        var doThisQuery = dataArr[1];
+
+        if (doThisCommand === "spotify-this-song") {
+            var spotify = new Spotify({
+                id: "39b64e92daab4cb6a56677a5e661c38d",
+                secret: "0674037de00a4e6ab6b4ce0a9b44e67c"
+            });
+
+            spotify.search({ type: 'track', query: doThisQuery }, function (err, data) {
+                if (err) {
+                    return console.log('Error occurred: ' + err);
+                }
+
+                console.log("----------------"); // Print break.
+                //console.log(data.tracks.items[0]);
+                console.log("Artist: " + data.tracks.items[0].artists[0].name);
+                console.log(""); // Print space.
+                console.log("Title: " + data.tracks.items[0].name);
+                console.log(""); // Print space.
+                console.log("Album: " + data.tracks.items[0].album.name);
+                console.log(""); // Print space.
+                console.log("Preview Link: " + data.tracks.items[0].preview_url);
+                console.log("----------------"); // Print break.
+            });
+        }
+    });
 }
