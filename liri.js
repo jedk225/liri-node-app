@@ -5,7 +5,7 @@ require("dotenv").config();
 var keys = require("./keys.js");
 
 var request = require("request");
-var spotify = require("spotify");
+var Spotify = require('node-spotify-api');
 var moment = require("moment")
 var dotenv = require("dotenv");
 var fs = require("fs");
@@ -47,29 +47,105 @@ if (command === "concert-this") {
     });
 }
 else if (command === "movie-this") {
-    request(queryUrl, function (error, response, body) {
-        if (error) {
-            console.log('error:', error); // Print the error if one occurred
 
-        } else if (response.statusCode === 200) {
-            console.log('Title:', JSON.parse(body).Title); // Print title.
+    if (!queryName) {
+        request('http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy', function (error, response, body) {
+            if (error) {
+                console.log('error:', error); // Print the error if one occurred
+
+            } else if (response.statusCode === 200) {
+                console.log('Title:', JSON.parse(body).Title); // Print title.
+                console.log(""); // Print space.
+                console.log('Release Year:', JSON.parse(body).Year); // Print Year.
+                console.log(""); // Print space.
+                console.log('IMDB Rating:', JSON.parse(body).imdbRating); // Print IMDB Rating.
+                console.log(""); // Print space.
+                console.log('Rotten Tomatoes:', JSON.parse(body).Ratings[1].Value); // Print Rotten Tomatoes Score.
+                console.log(""); // Print space.
+                console.log('Country:', JSON.parse(body).Country); // Print Country.
+                console.log(""); // Print space.
+                console.log('Language:', JSON.parse(body).Language); // Print Language.
+                console.log(""); // Print space.
+                console.log('Plot:', JSON.parse(body).Plot); // Print Plot.
+                console.log(""); // Print space.
+                console.log('Actors:', JSON.parse(body).Actors); // Print Actors.
+                console.log("----------------"); // Print break.
+
+            }
+
+        });
+    }
+
+    else {
+        request(queryUrl, function (error, response, body) {
+            if (error) {
+                console.log('error:', error); // Print the error if one occurred
+
+            } else if (response.statusCode === 200) {
+                console.log('Title:', JSON.parse(body).Title); // Print title.
+                console.log(""); // Print space.
+                console.log('Release Year:', JSON.parse(body).Year); // Print Year.
+                console.log(""); // Print space.
+                console.log('IMDB Rating:', JSON.parse(body).imdbRating); // Print IMDB Rating.
+                console.log(""); // Print space.
+                console.log('Rotten Tomatoes:', JSON.parse(body).Ratings[1].Value); // Print Rotten Tomatoes Score.
+                console.log(""); // Print space.
+                console.log('Country:', JSON.parse(body).Country); // Print Country.
+                console.log(""); // Print space.
+                console.log('Language:', JSON.parse(body).Language); // Print Language.
+                console.log(""); // Print space.
+                console.log('Plot:', JSON.parse(body).Plot); // Print Plot.
+                console.log(""); // Print space.
+                console.log('Actors:', JSON.parse(body).Actors); // Print Actors.
+                console.log("----------------"); // Print break.
+            }
+        });
+    }
+
+}
+else if (command === "spotify-this-song") {
+
+    var spotify = new Spotify({
+        id: "39b64e92daab4cb6a56677a5e661c38d",
+        secret: "0674037de00a4e6ab6b4ce0a9b44e67c"
+    });
+
+    if (!queryName) {
+        spotify.search({ type: 'track', query: "The Sign Ace of Base" }, function (err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+
+            console.log("----------------"); // Print break.
+            //console.log(data.tracks.items[0]);
+            console.log("Artist: " + data.tracks.items[0].artists[0].name);
             console.log(""); // Print space.
-            console.log('Release Year:', JSON.parse(body).Year); // Print Year.
+            console.log("Title: " + data.tracks.items[0].name);
             console.log(""); // Print space.
-            console.log('IMDB Rating:', JSON.parse(body).imdbRating); // Print IMDB Rating.
+            console.log("Album: " + data.tracks.items[0].album.name);
             console.log(""); // Print space.
-            console.log('Rotten Tomatoes:', JSON.parse(body).Ratings[1].Value); // Print Rotten Tomatoes Score.
-            console.log(""); // Print space.
-            console.log('Country:', JSON.parse(body).Country); // Print Country.
-            console.log(""); // Print space.
-            console.log('Language:', JSON.parse(body).Language); // Print Language.
-            console.log(""); // Print space.
-            console.log('Plot:', JSON.parse(body).Plot); // Print Plot.
-            console.log(""); // Print space.
-            console.log('Actors:', JSON.parse(body).Actors); // Print Actors.
+            console.log("Preview Link: " + data.tracks.items[0].preview_url);
             console.log("----------------"); // Print break.
 
-        }
+        });
+    }
+    else {
+        spotify.search({ type: 'track', query: queryName }, function (err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
 
-    });
+            console.log("----------------"); // Print break.
+            //console.log(data.tracks.items[0]);
+            console.log("Artist: " + data.tracks.items[0].artists[0].name);
+            console.log(""); // Print space.
+            console.log("Title: " + data.tracks.items[0].name);
+            console.log(""); // Print space.
+            console.log("Album: " + data.tracks.items[0].album.name);
+            console.log(""); // Print space.
+            console.log("Preview Link: " + data.tracks.items[0].preview_url);
+            console.log("----------------"); // Print break.
+
+        });
+    }
 }
