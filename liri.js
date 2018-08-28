@@ -4,6 +4,7 @@ require("dotenv").config();
 //required to import the `keys.js` file
 var keys = require("./keys.js");
 
+// Third party npm packages
 var request = require("request");
 var Spotify = require('node-spotify-api');
 var moment = require("moment")
@@ -22,7 +23,7 @@ var concertURL = "https://rest.bandsintown.com/artists/" + queryName + "/events?
 //movie-this queryURL global
 var queryUrl = 'http://www.omdbapi.com/?t=' + queryName + '&y=&plot=short&apikey=trilogy'
 
-
+// If user types 'concert-this'
 if (command === "concert-this") {
     request(concertURL, function (error, response, body) {
         if (error) {
@@ -47,8 +48,10 @@ if (command === "concert-this") {
     });
 }
 
+// If user types 'movie-this'
 else if (command === "movie-this") {
 
+    // If user does not type in a query after the command, "Mr. Nobody" will default
     if (!queryName) {
         request('http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy', function (error, response, body) {
             if (error) {
@@ -103,6 +106,7 @@ else if (command === "movie-this") {
     }
 }
 
+// If user types 'spotify-this-song'
 else if (command === "spotify-this-song") {
 
     var spotify = new Spotify({
@@ -110,6 +114,7 @@ else if (command === "spotify-this-song") {
         secret: "0674037de00a4e6ab6b4ce0a9b44e67c"
     });
 
+    // If user does not type in a query after the command, Ace of Base will default
     if (!queryName) {
         spotify.search({ type: 'track', query: "The Sign Ace of Base" }, function (err, data) {
             if (err) {
@@ -151,6 +156,7 @@ else if (command === "spotify-this-song") {
     }
 }
 
+// If user types 'do-what-it-says'
 else if (command === "do-what-it-says") {
     fs.readFile("random.txt", "utf8", function (error, data) {
 
