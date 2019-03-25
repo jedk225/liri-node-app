@@ -1,4 +1,4 @@
-## Node HW #10 for the Coding Bootcamp at UCI
+## Node
 
 ## liri-node-app
 - LIRI is a Language Interpretation and Recognition Interface
@@ -10,9 +10,9 @@
 - After a command is inputed, users can enter in their own queries to find information about upcoming concerts, song info, movie info, etc.
 
 ## Learning Opportunities:
-The purpose of this project is to learn how to properly work with Node.js
+The purpose of this project is to demonstrate how to work with Node.js
 
-While working with this project, we learned about:
+This web app demonstrates:
 - Retrieving user input from the command line
 - Initializing a package.json
 - Installing third party npm packages
